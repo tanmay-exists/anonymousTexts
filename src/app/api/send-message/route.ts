@@ -16,7 +16,7 @@ export async function POST(request: Request) {
         {status: 404}
       )
     }
-    if(!user.isAcceptingMessage) {
+    if(!user.isAcceptingMessages) {
       return Response.json(
         {
           success: false,
