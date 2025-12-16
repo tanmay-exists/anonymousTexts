@@ -4,7 +4,7 @@ import dbConnect from '../../../lib/dbConnect.ts'
 import UserModel from '../../../model/User.ts'
 import {User} from 'next-auth'
 
-export async function POST(reques: Request){
+export async function POST(request: Request){
   await dbConnect()
   const session = await getServerSession(authOptions)
   const user: User = session?.user as User
@@ -22,7 +22,7 @@ export async function POST(reques: Request){
   try {
     const updatedUser = await UserModel.findByIdAndUpdate(
       userId,
-      {isAcceptingMessage: acceptMessages},
+      {isAcceptingMessages: acceptMessages},
       {new: true}
     )
     if(!updatedUser){
@@ -82,7 +82,7 @@ export async function GET(request: Request) {
     return Response.json(
       {
         success: true,
-        isAcceptingMessages: foundUser.isAcceptingMessage
+        isAcceptingMessages: foundUser.isAcceptingMessages
       },
       {status: 200}
     )

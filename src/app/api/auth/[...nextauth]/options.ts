@@ -41,7 +41,7 @@ export const authOptions: NextAuthOptions = {
       }
     })
   ],
-  callback: {  
+  callbacks: {  
     async jwt({token, user}){
       if(user){
         token._id = user._id?.toString()

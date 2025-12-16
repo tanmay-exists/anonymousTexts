@@ -7,6 +7,7 @@ import Link from 'next/link'
 import { toast } from "sonner"
 import { useRouter } from 'next/navigation'
 import { signInSchema } from '../../../schemas/signInSchema.ts'
+import { signIn } from "next-auth/react";
 
 import { Button } from "@/components/ui/button"
 import {

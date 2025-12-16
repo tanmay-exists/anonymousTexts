@@ -9,7 +9,7 @@ import {ApiResponse} from '../../../types/ApiResponse.ts'
 import { zodResolver } from '@hookform/resolvers/zod';
 import axios, { AxiosError } from 'axios';
 import { Separator } from '@/components/ui/separator';
-import { MessageCard } from '@/components/MessageCard';
+import MessageCard from '@/components/MessageCard';
 import { Button } from '@/components/ui/button';
 import { Loader2, RefreshCcw } from 'lucide-react';
 import { Switch } from '@/components/ui/switch';
@@ -27,6 +27,9 @@ const page = () => {
   const { data: session } = useSession();
   const form = useForm({
     resolver: zodResolver(acceptMessageSchema),
+    defaultValues: {
+      acceptMessages: false 
+    }
   });
 
   const { register, watch, setValue } = form;
@@ -139,7 +142,7 @@ const page = () => {
       <div className="mb-4">
         <Switch
           {...register('acceptMessages')}
-          checked={acceptMessages}
+          checked={!!acceptMessages}
           onCheckedChange={handleSwitchChange}
           disabled={isSwitchLoading}
         />

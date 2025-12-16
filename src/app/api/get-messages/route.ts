@@ -1,46 +1,59 @@
 import { getServerSession } from 'next-auth'
-import { authOptions } from '../auth/[...nextauth]/options.ts'
+import { authOptions } from '../auth/[...nextauth]/options'
 import dbConnect from '../../../lib/dbConnect.ts'
 import UserModel from '../../../model/User.ts'
-import {User} from 'next-auth'
+import { User } from 'next-auth'
+import mongoose from "mongoose";
 
 export async function GET(request: Request) {
   await dbConnect()
+  
   const session = await getServerSession(authOptions)
   const user: User = session?.user as User
-  if(!session || !session.user) {
+
+  if (!session || !session.user) {
     return Response.json(
-      {
-        success: false,
-        message: 'Not Authenticated'
-      },
-      {status: 401}
+      { success: false, message: 'Not Authenticated' },
+      { status: 401 }
     )
   }
-  const userId = new mongoose.Types.ObjectId(user._id)
+
+  // Convert string ID to Mongoose ObjectId
+  const userId = new mongoose.Types.ObjectId(user._id);
+
   try {
-    const user = await UserModel.aggregate([
-      {$match: {id: userId}},
-      {$unwind: '$messages'},
-      {$sort: {'messages.createdAt': -1}},
-      {$group: {_id: '$_id', messages: {$push: '$messages'}}}
-    ])
-    if(!user || user.length === 0) {
-      return Response.json(
-        {
-          success: false,
-          message: 'User not found'
-        },
-        {status: 404}
-      )
+    // Use findOne instead of aggregate to safely handle users with 0 messages
+    const userFound = await UserModel.aggregate([
+      { $match: { _id: userId } },
+      { $unwind: '$messages' },
+      { $sort: { 'messages.createdAt': -1 } },
+      { $group: { _id: '$_id', messages: { $push: '$messages' } } }
+    ]).exec();
+
+    // Check if user has messages (Aggregation result)
+    let messages = [];
+    if (userFound && userFound.length > 0) {
+      messages = userFound[0].messages;
+    } else {
+      // If aggregation returns empty, check if user actually exists
+      const userExists = await UserModel.findById(userId);
+      if (!userExists) {
+         return Response.json(
+          { success: false, message: 'User not found' },
+          { status: 404 }
+        );
+      }
+      // User exists but has 0 messages, so messages remains []
     }
+
     return Response.json(
       {
         success: true,
-        messages: user[0].messages
+        messages: messages
       },
-      {status: 200}
+      { status: 200 }
     )
+
   } catch (error) {
     console.log('Error getting messages', error)
     return Response.json(
@@ -48,7 +61,7 @@ export async function GET(request: Request) {
         success: false,
         message: 'Error getting messages'
       },
-      {status: 500}
+      { status: 500 }
     )
   }
 }

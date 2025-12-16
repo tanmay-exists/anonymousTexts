@@ -19,8 +19,11 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog"
 import { Button } from "@/components/ui/button"
-import {Message} from '../src/model/User.ts'
-import {ApiResponse} from '../src/types/ApiResponse.ts'
+import {Message} from '@/model/User.ts'
+import type { ApiResponse } from "@/types/ApiResponse";
+import axios from "axios";
+import { toast } from "sonner";
+import { X } from "lucide-react";
 
 type MessageCardProps = {
   message: Message
@@ -30,7 +33,7 @@ type MessageCardProps = {
 const MessageCard = ({message, onMessageDelete}: MessageCardProps) => {
   
   const handleDeleteConfirm = async () => {
-    const response = axios.delete<ApiResponse(`/api/delete-message/${message._id}`)
+    const response = axios.delete<ApiResponse>(`/api/delete-message/${message._id}`)
     toast.success(response.data.message)
     onMessageDelete(message._id)
   }
@@ -41,7 +44,7 @@ const MessageCard = ({message, onMessageDelete}: MessageCardProps) => {
         <CardTitle>Card Title</CardTitle>
         <AlertDialog>
           <AlertDialogTrigger asChild>
-            <Button variant="destructive"><X classname='w-5 h-5' /></Button>
+            <Button variant="destructive"><X className='w-5 h-5' /></Button>
           </AlertDialogTrigger>
           <AlertDialogContent>
             <AlertDialogHeader>
