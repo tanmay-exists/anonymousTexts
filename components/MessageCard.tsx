@@ -33,7 +33,7 @@ type MessageCardProps = {
 const MessageCard = ({message, onMessageDelete}: MessageCardProps) => {
   
   const handleDeleteConfirm = async () => {
-    const response = axios.delete<ApiResponse>(`/api/delete-message/${message._id}`)
+    const response = await axios.delete<ApiResponse>(`/api/delete-message/${message._id}`)
     toast.success(response.data.message)
     onMessageDelete(message._id)
   }
@@ -41,17 +41,17 @@ const MessageCard = ({message, onMessageDelete}: MessageCardProps) => {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Card Title</CardTitle>
+        <CardTitle>{message.content}</CardTitle>
+        <CardDescription>{new Date(message.createdAt).toLocaleString()}</CardDescription>
         <AlertDialog>
           <AlertDialogTrigger asChild>
             <Button variant="destructive"><X className='w-5 h-5' /></Button>
           </AlertDialogTrigger>
           <AlertDialogContent>
             <AlertDialogHeader>
-              <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+              <AlertDialogTitle>Are you sure to delete the message?</AlertDialogTitle>
               <AlertDialogDescription>
-                This action cannot be undone. This will permanently delete your account
-                and remove your data from our servers.
+                This action cannot be undone. This will permanently delete this message and remove your data from our servers.
               </AlertDialogDescription>
             </AlertDialogHeader>
             <AlertDialogFooter>
@@ -60,15 +60,7 @@ const MessageCard = ({message, onMessageDelete}: MessageCardProps) => {
             </AlertDialogFooter>
           </AlertDialogContent>
         </AlertDialog>
-        <CardDescription>Card Description</CardDescription>
-        <CardAction>Card Action</CardAction>
       </CardHeader>
-      <CardContent>
-        {/* <p>Card Content</p> */}
-      </CardContent>
-      <CardFooter>
-        {/* <p>Card Footer</p> */}
-      </CardFooter>
     </Card>
   )
 }
