@@ -9,8 +9,8 @@ import { useDebounceCallback } from 'usehooks-ts'
 import { toast } from "sonner"
 import { useRouter } from 'next/navigation'
 import axios, { AxiosError } from 'axios'
-import { ApiResponse } from '../../../types/ApiResponse.ts'
-import { signUpSchema } from '../../../schemas/signUpSchema.ts'
+import { ApiResponse } from '../../../types/ApiResponse'
+import { signUpSchema } from '../../../schemas/signUpSchema'
 
 import { Button } from "@/components/ui/button"
 import {

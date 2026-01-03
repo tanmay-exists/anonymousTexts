@@ -1,4 +1,4 @@
-import Navbar from "../../../components/Navbar.tsx";
+import Navbar from "../../../components/Navbar";
 // import '../globals.css'
 
 export default function AppLayout({

@@ -4,8 +4,8 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { useSession } from 'next-auth/react';
 import { toast } from "sonner"
 import { useForm } from 'react-hook-form';
-import { acceptMessageSchema } from '../../../schemas/acceptMessageSchema.ts';
-import {ApiResponse} from '../../../types/ApiResponse.ts'
+import { acceptMessageSchema } from '../../../schemas/acceptMessageSchema';
+import { ApiResponse } from '../../../types/ApiResponse'
 import { zodResolver } from '@hookform/resolvers/zod';
 import axios, { AxiosError } from 'axios';
 import { Separator } from '@/components/ui/separator';
@@ -28,7 +28,7 @@ const page = () => {
   const form = useForm({
     resolver: zodResolver(acceptMessageSchema),
     defaultValues: {
-      acceptMessages: false 
+      acceptMessages: false
     }
   });
 
@@ -44,7 +44,7 @@ const page = () => {
       const axiosError = error as AxiosError<ApiResponse>;
       toast.error("Error", {
         description:
-        axiosError.response?.data?.message ??
+          axiosError.response?.data?.message ??
           "Failed to fetch message settings",
       });
     } finally {
@@ -100,13 +100,13 @@ const page = () => {
       const axiosError = error as AxiosError<ApiResponse>;
       toast.error("Error", {
         description:
-        axiosError.response?.data?.message ??
+          axiosError.response?.data?.message ??
           "Failed to update message settings",
       });
     }
   };
 
-  if(!session || !session.user){
+  if (!session || !session.user) {
     return <div>Please login</div>
   }
 

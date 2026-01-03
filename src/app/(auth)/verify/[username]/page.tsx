@@ -3,9 +3,9 @@ import { useRouter, useParams } from 'next/navigation'
 import * as z from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
-import {verifySchema} from '../../../../schemas/verifySchema.ts'
+import { verifySchema } from '../../../../schemas/verifySchema'
 import axios, { AxiosError } from 'axios'
-import { ApiResponse } from '../../../../types/ApiResponse.ts'
+import { ApiResponse } from '../../../../types/ApiResponse'
 import {
   Form,
   FormField,
@@ -15,10 +15,12 @@ import {
 } from "@/components/ui/form"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
+import { toast } from "sonner"
+
 
 const VerifyAccount = () => {
   const router = useRouter()
-  const params = useParams<{username: string}>()
+  const params = useParams<{ username: string }>()
 
   const form = useForm<z.infer<typeof verifySchema>>({
     resolver: zodResolver(verifySchema),
@@ -56,7 +58,7 @@ const VerifyAccount = () => {
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Verification Code</FormLabel>
-                  <Input {...field} placeholder="code"/>
+                  <Input {...field} placeholder="code" />
                   <FormMessage />
                 </FormItem>
               )}

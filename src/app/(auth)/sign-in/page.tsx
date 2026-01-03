@@ -6,7 +6,7 @@ import * as z from "zod"
 import Link from 'next/link'
 import { toast } from "sonner"
 import { useRouter } from 'next/navigation'
-import { signInSchema } from '../../../schemas/signInSchema.ts'
+import { signInSchema } from '../../../schemas/signInSchema'
 import { signIn } from "next-auth/react";
 
 import { Button } from "@/components/ui/button"
@@ -31,7 +31,7 @@ const SignInPage = () => {
     }
   })
 
-    // When form is submitted
+  // When form is submitted
   const onSubmit = async (data: z.infer<typeof signInSchema>) => {
     const result = await signIn('credentials', {
       redirect: false,
@@ -39,16 +39,16 @@ const SignInPage = () => {
       password: data.password
     })
 
-    if(result?.error) {
-      if(result.error == 'CredentialsSignin'){
+    if (result?.error) {
+      if (result.error == 'CredentialsSignin') {
         toast.error('Incorrect username or password')
       }
-      else{
+      else {
         toast.error(result.error)
       }
     }
 
-    if(result?.url){
+    if (result?.url) {
       router.replace('/dashboard')
     }
   }
